@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:os="http://orderService.ws/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        name="ordersService" targetNamespace="http://orderService.ws/">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                   xmlns:os="http://orderService.ws/" elementFormDefault="unqualified"
+                   targetNamespace="http://orderService.ws/" version="1.0">
+
+            <xs:complexType name="order">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:long"/>
+                    <xs:element name="date" type="xs:dateTime"/>
+                    <xs:element name="client" type="os:client"/>
+                    <xs:element name="product" type="os:product" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="product">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:long"/>
+                    <xs:element name="description" type="xs:string" />
+                    <xs:element name="quantity" type="xs:long"/>
+                    <xs:element name="price" type="xs:double"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="client">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:long"/>
+                    <xs:element name="name" type="xs:string" />
+                    <xs:element name="address" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:element name="getOrdersRequest" type="os:getOrdersRequest"/>
+
+            <xs:element name="getOrdersResponse" type="os:getOrdersResponse"/>
+
+            <xs:complexType name="getOrdersRequest">
+                <xs:sequence>
+                    <xs:element name="client" type="xs:long"/>
+                    <xs:element name="date" type="xs:dateTime"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="getOrdersResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="order"
+                                type="os:order"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:element name="createOrderRequest" type="os:createOrderRequest"/>
+
+            <xs:element name="createOrderResponse" type="os:createOrderResponse"/>
+
+            <xs:complexType name="createOrderRequest">
+                <xs:sequence>
+                    <xs:element name="client" type="os:client"/>
+                    <xs:element name="order" type="os:order"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="createOrderResponse">
+                <xs:sequence>
+                    <xs:element name="result" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:complexType>
+
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="getOrdersRequest">
+        <wsdl:part element="os:getOrdersRequest" name="parameters">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getOrdersResponse">
+        <wsdl:part element="os:getOrdersResponse" name="parameters">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="createOrderRequest">
+        <wsdl:part element="os:createOrderRequest" name="parameters">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="createOrderResponse">
+        <wsdl:part element="os:createOrderResponse" name="parameters">
+        </wsdl:part>
+    </wsdl:message>
+
+    <wsdl:portType name="OrdersPortType">
+        <wsdl:operation name="getOrders">
+            <wsdl:input message="os:getOrdersRequest" name="getOrdersRequest">
+            </wsdl:input>
+            <wsdl:output message="os:getOrdersResponse" name="getOrdersResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createOrder">
+            <wsdl:input message="os:createOrderRequest" name="createOrderRequest">
+            </wsdl:input>
+            <wsdl:output message="os:createOrderResponse" name="createOrderResponse">
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="OrdersServiceBinding"
+                  type="os:OrdersPortType">
+        <soap:binding style="document"
+                      transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="getOrders">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="getOrdersRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="getOrdersResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createOrder">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="createOrderRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="createOrderResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="OrdersService">
+        <wsdl:port binding="os:OrdersServiceBinding"
+                   name="OrdersPort">
+            <soap:address
+                    location="http://localhost:8080/wsdl/services/ordersService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
